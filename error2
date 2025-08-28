@@ -1,0 +1,11 @@
+for idx, hit in enumerate(results):
+    text_preview = hit.payload.get("text", "")[:120].replace("\n", " ")
+    metadata = hit.payload
+    output.append({
+        "score": hit.score,
+        "text": hit.payload.get("text", ""),
+        "metadata": metadata
+    })
+
+# 🔇 no logging of every hit
+return output
