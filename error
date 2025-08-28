@@ -1,0 +1,51 @@
+[ContextAgent] Retrieved 50 capped chunks for WS50 - DISPLAY + TP.
+[ContextAgent] ⚠️ No PRD chunks found → falling back to general chunks
+[ContextAgent] ⚠️ No KB chunks found → falling back to general chunks
+[ContextAgent] ⚠️ No FIELD chunks found → falling back to general chunks
+[ContextAgent] ✅ Completed TC58 - DISPLAY + TP, results: 15
+[ContextAgent] ✅ Completed TC53e/58e - DISPLAY + TP, results: 15
+[ContextAgent] ✅ Completed TC53 - DISPLAY + TP, results: 15
+[ContextAgent] ✅ Completed TC73/78 - DISPLAY + TP, results: 15
+[ContextAgent] ✅ Completed WS50 - DISPLAY + TP, results: 15
+
+[ContextAgent] 🎯 Finished. Parsed 240 DFMEA entries across 16 pairs.
+
+INFO:     127.0.0.1:52091 - "POST /dfmea/generate HTTP/1.1" 200 OK
+INFO:     Finished server process [22216]
+ERROR:    Traceback (most recent call last):
+  File "C:\Program Files\Python312\Lib\asyncio\runners.py", line 195, in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python312\Lib\asyncio\runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python312\Lib\asyncio\base_events.py", line 678, in run_until_complete
+    self.run_forever()
+  File "C:\Program Files\Python312\Lib\asyncio\base_events.py", line 645, in run_forever
+    self._run_once()
+  File "C:\Program Files\Python312\Lib\asyncio\base_events.py", line 1999, in _run_once
+    handle._run()
+  File "C:\Program Files\Python312\Lib\asyncio\events.py", line 88, in _run
+    self._context.run(self._callback, *self._args)
+  File "C:\Users\AS9969\Desktop\Ashish Work Folder\dfmea_fina_env\Lib\site-packages\uvicorn\server.py", line 69, in serve
+    with self.capture_signals():
+         ^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python312\Lib\contextlib.py", line 144, in __exit__
+    next(self.gen)
+  File "C:\Users\AS9969\Desktop\Ashish Work Folder\dfmea_fina_env\Lib\site-packages\uvicorn\server.py", line 330, in capture_signals
+    signal.raise_signal(captured_signal)
+  File "C:\Program Files\Python312\Lib\asyncio\runners.py", line 157, in _on_sigint
+    raise KeyboardInterrupt()
+KeyboardInterrupt
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\AS9969\Desktop\Ashish Work Folder\dfmea_fina_env\Lib\site-packages\starlette\routing.py", line 699, in lifespan    
+    await receive()
+  File "C:\Users\AS9969\Desktop\Ashish Work Folder\dfmea_fina_env\Lib\site-packages\uvicorn\lifespan\on.py", line 137, in receive   
+    return await self.receive_queue.get()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python312\Lib\asyncio\queues.py", line 158, in get
+    await getter
+asyncio.exceptions.CancelledError
