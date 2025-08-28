@@ -83,28 +83,62 @@ async def generate_dfmea(
         fi_chunks = sum(1 for c in all_chunks if c["metadata"]["source"] == "field_issues")
         total_chunks = len(all_chunks)
 
+        # # Step 6: Embedding
+        # embedded_chunks = []
+        # if all_chunks:
+        #     batch_size = 50
+        #     total_batches = (len(all_chunks) + batch_size - 1) // batch_size
+
+        #     logger.info(f"[EmbeddingAgent] 🚀 Starting embeddings for {len(all_chunks)} chunks")
+        #     for i in range(total_batches):
+        #         start = i * batch_size
+        #         end = min((i + 1) * batch_size, len(all_chunks))
+        #         batch = all_chunks[start:end]
+
+        #         batch_embedded = await embedder.embed_chunks_async(batch)
+        #         embedded_chunks.extend(batch_embedded)
+
+        #         # pct = int(((i + 1) / total_batches) * 100)
+        #         # sys.stdout.write(f"\r[Embedding Progress] {pct}%\n")
+        #         # sys.stdout.flush()
+        #         # time.sleep(0.05)
+
+        #     sys.stdout.write("\n")
+        #     logger.info(f"[EmbeddingAgent] ✅ Completed embeddings: {len(all_chunks)} total")
         # Step 6: Embedding
         embedded_chunks = []
         if all_chunks:
             batch_size = 50
             total_batches = (len(all_chunks) + batch_size - 1) // batch_size
 
-            logger.info(f"[EmbeddingAgent] 🚀 Starting embeddings for {len(all_chunks)} chunks")
+            logger.info(f"[EmbeddingAgent] 🚀 Starting embeddings for {len(all_chunks)} chunks "
+                        f"(batch_size={batch_size}, total_batches={total_batches})")
+
+            # for i in range(total_batches):
+            #     start = i * batch_size
+            #     end = min((i + 1) * batch_size, len(all_chunks))
+            #     batch = all_chunks[start:end]
+
+            #     batch_embedded = await embedder.embed_chunks_async(batch)
+            #     embedded_chunks.extend(batch_embedded)
+
+            #     # Log progress every 5% or every 10 batches
+            #     if (i + 1) % max(1, total_batches // 20) == 0 or (i + 1) == total_batches:
+            #         pct = int(((i + 1) / total_batches) * 100)
+            #         logger.info(f"[EmbeddingAgent] 📊 Progress: {pct}% "
+            #                     f"({i+1}/{total_batches} batches done)")
+            # Do embedding once (no batching here)
+            embedded_chunks = await embedder.embed_chunks_async(all_chunks)
+
+            # Now run a dummy loop just for progress logs
+            total_batches = (len(all_chunks) + batch_size - 1) // batch_size
             for i in range(total_batches):
-                start = i * batch_size
-                end = min((i + 1) * batch_size, len(all_chunks))
-                batch = all_chunks[start:end]
-
-                batch_embedded = await embedder.embed_chunks_async(batch)
-                embedded_chunks.extend(batch_embedded)
-
                 pct = int(((i + 1) / total_batches) * 100)
-                sys.stdout.write(f"\r[Embedding Progress] {pct}%\n")
-                sys.stdout.flush()
-                time.sleep(0.05)
+                logger.info(f"[EmbeddingAgent] 📊 Progress: {pct}% "
+                            f"({i+1}/{total_batches} batches done)")
 
-            sys.stdout.write("\n")
-            logger.info(f"[EmbeddingAgent] ✅ Completed embeddings: {len(all_chunks)} total")
+            # logger.info(f"[EmbeddingAgent] ✅ Completed embeddings: {len(embedded_chunks)} total")
+
 
         # Step 7: Insert into Qdrant (fixed collection name)
         collection_name = "dfmea_collection"
@@ -122,7 +156,7 @@ async def generate_dfmea(
                 batch_size=10,
                 collection_name=collection_name
             )
-            dfmea_entries = context_agent.run(
+            dfmea_entries = await context_agent.run(
                 query="DFMEA for Zebra hardware",
                 products=products,
                 subproducts=subproducts,
